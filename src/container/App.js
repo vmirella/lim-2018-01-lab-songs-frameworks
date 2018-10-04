@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { Button } from 'reactstrap';
+import { Form, Row, Col, Button } from 'reactstrap';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-      </div>
+      <Form>
+        <Row form>
+          <Col md={3}>
+          </Col>
+        </Row>
+      </Form>
     );
   }
 }
