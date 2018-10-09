@@ -19,30 +19,45 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     fetch('http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=7b4175fff31477b727e88d23390fa95b&format=json&limit=10')
     .then(response => response.json())
     .then(result => {
 
-      const arrayArtists = [];
-      
+      const arrayArtists = [];      
       const resultArtists = Object.values(result.artists.artist);
       
       resultArtists.map((artist) => {
-        arrayArtists.push({
-          name: artist.name,
-          image: artist.image[4]['#text']
+
+        const artistName = (artist.name).replace(' ', '+');
+
+        fetch(`http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${artistName}&api_key=7b4175fff31477b727e88d23390fa95b&format=json&limit=10`)
+        .then(response => response.json())
+        .then(resultSongs => {
+          const arraySongs = []; 
+          const songs = Object.values(resultSongs.topalbums.album);
+
+          songs.map((song) => {
+            arraySongs.push({
+              name: song.name,
+              likes: 0
+            });
+          });
+
+          arrayArtists.push({
+            name: artist.name,
+            image: artist.image[4]['#text'],
+            songs: arraySongs
+          });
+
+          this.setState({arrayArtists: arrayArtists});
         });
       });
-      
-      this.setState({arrayArtists: arrayArtists});
     })
     .catch((err) => {
       // algo salió mal...
       console.error("failed", err);
     });
-
-    //http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=Kanye+West&api_key=7b4175fff31477b727e88d23390fa95b&format=json
   }
 
   render() {
@@ -52,13 +67,7 @@ class App extends Component {
           <div className="col-4">
             <Slider arrayArtists = {this.state.arrayArtists}/>
           </div>
-        </div >
-        <div className="row">
-          <div className="col-4">
-          <ListSong/>
-          </div>
-        </div >  
-
+        </div >        
       </div>
     );
   }

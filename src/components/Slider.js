@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import ButtonRow from './ButtonRow';
+import ListSong from './ListSong';
 
 class Slider extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Slider extends Component {
     }
     this.showImage = this.showImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleLikes = this.handleLikes.bind(this);
   }
   
   handleChange = (increment) => {
@@ -29,10 +31,29 @@ class Slider extends Component {
       return;
     }
     for (i = 0; i < count; i++) {
-      let image = ReactDOM.findDOMNode(this.refs['image-' + i]);
+      let image = ReactDOM.findDOMNode(this.refs[`image-${i}`]);
       image.style.display = 'none';  
     }
-    ReactDOM.findDOMNode(this.refs['image-' + (this.state.slideIndex - 1)]).style.display = 'block';
+    ReactDOM.findDOMNode(this.refs[`image-${(this.state.slideIndex - 1)}`]).style.display = 'block';
+  }
+
+  handleLikes = (likes, index, artistIndex) => {
+    const arrayArtists = this.props.arrayArtists;
+
+    let currentLikes = arrayArtists[artistIndex].songs[index].likes;
+    const likesResult = currentLikes += likes;
+    if(likesResult >= 0) {
+      arrayArtists[artistIndex].songs[index].likes = likesResult;
+      this.setState({arrayArtists});
+    }
+    
+  }
+
+  sortSongs = (arraySongs) => {
+    const orderSongs = arraySongs.sort((a, b) => {
+      return (b.likes - a.likes)
+    });
+    return orderSongs;
   }
 
   componentDidUpdate() {
@@ -42,17 +63,25 @@ class Slider extends Component {
   }
 
   render() {
-    if (this.props.arrayArtists.length) {
+    if (this.props.arrayArtists.length > 0) {
       return (
         <div>          
           <div>
             <ButtonRow orientation = "left" onIndexChange = {this.handleChange}></ButtonRow>
             {this.props.arrayArtists.map((artist, i) => {
-              return <img src = {artist.image} key = {i} ref = {'image-' + i} className= "slider-item"/>
+              return (
+                <div className= "slider-item" ref = {`image-${i}`} key = {i}>
+                  <img src = {artist.image} />
+                  <h3>{this.props.arrayArtists[i].name}</h3>
+                  <div>
+                    <ListSong arraySongs = {this.sortSongs(this.props.arrayArtists[i].songs)} handleLikes = {this.handleLikes} artistIndex = {i} />
+                  </div >  
+                </div>  
+              ) 
             })}
             <ButtonRow orientation = "rigth" onIndexChange = {this.handleChange}></ButtonRow>
           </div>
-          <h3>{this.props.arrayArtists[0].name}</h3>          
+                   
         </div> 
       )
     }
