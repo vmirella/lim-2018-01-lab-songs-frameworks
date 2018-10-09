@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    fetch('http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=7b4175fff31477b727e88d23390fa95b&format=json&limit=10')
+    fetch('https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=7b4175fff31477b727e88d23390fa95b&format=json&limit=10')
     .then(response => response.json())
     .then(result => {
 
@@ -31,7 +31,7 @@ class App extends Component {
 
         const artistName = (artist.name).replace(' ', '+');
 
-        fetch(`http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${artistName}&api_key=7b4175fff31477b727e88d23390fa95b&format=json&limit=10`)
+        fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${artistName}&api_key=7b4175fff31477b727e88d23390fa95b&format=json&limit=10`)
         .then(response => response.json())
         .then(resultSongs => {
           const arraySongs = []; 
@@ -62,9 +62,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container grey darken-4">        
         <div className="row">
-          <div className="col-4">
+          <div className="col s12">
+            <h3 className = "center">Ranking songs</h3>
             <Slider arrayArtists = {this.state.arrayArtists}/>
           </div>
         </div >        

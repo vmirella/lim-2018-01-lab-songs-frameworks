@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import ButtonRow from './ButtonRow';
+import ButtonArrow from './ButtonArrow';
 import ListSong from './ListSong';
 
 class Slider extends Component {
@@ -64,24 +64,19 @@ class Slider extends Component {
 
   render() {
     if (this.props.arrayArtists.length > 0) {
-      return (
-        <div>          
-          <div>
-            <ButtonRow orientation = "left" onIndexChange = {this.handleChange}></ButtonRow>
-            {this.props.arrayArtists.map((artist, i) => {
-              return (
-                <div className= "slider-item" ref = {`image-${i}`} key = {i}>
-                  <img src = {artist.image} />
-                  <h3>{this.props.arrayArtists[i].name}</h3>
-                  <div>
-                    <ListSong arraySongs = {this.sortSongs(this.props.arrayArtists[i].songs)} handleLikes = {this.handleLikes} artistIndex = {i} />
-                  </div >  
-                </div>  
-              ) 
-            })}
-            <ButtonRow orientation = "rigth" onIndexChange = {this.handleChange}></ButtonRow>
-          </div>
-                   
+      return (     
+        <div className = "div-slider">
+          <ButtonArrow orientation = "left" onIndexChange = {this.handleChange}></ButtonArrow>
+          {this.props.arrayArtists.map((artist, i) => {
+            return (
+              <div className = "slider-item center" ref = {`image-${i}`} key = {i}>
+                <img className = "responsive-img" src = {artist.image} />
+                <h4>{this.props.arrayArtists[i].name}</h4>
+                <ListSong arraySongs = {this.sortSongs(this.props.arrayArtists[i].songs)} handleLikes = {this.handleLikes} artistIndex = {i} /> 
+              </div>  
+            ) 
+          })}
+          <ButtonArrow orientation = "rigth" onIndexChange = {this.handleChange}></ButtonArrow>
         </div> 
       )
     }
