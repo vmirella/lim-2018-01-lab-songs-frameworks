@@ -8,13 +8,13 @@ const ListSong = (props) => {
         <div key={i}>
           <div className="divider"></div>
           <div className = "row">
-            <div className = "col s8 m9">
+            <div className = "col s6 m9">
               {song.name}
             </div>
-            <div className = "col s1">
+            <div className = "col s2 m1">
               <button className = "btn-floating btn-small waves-effect waves-light teal accent-3" onClick = {() => props.handleLikes(1, i, props.artistIndex)}><i className = "material-icons">favorite</i></button>
             </div>
-            <div className = "col s1"> 
+            <div className = "col s2 m1"> 
               <button className = "btn-floating btn-small waves-effect waves-light red" onClick = {() => props.handleLikes(-1, i, props.artistIndex)}><i className = "material-icons">thumb_down</i></button> 
             </div>
             <div className = "col s2 m1">
